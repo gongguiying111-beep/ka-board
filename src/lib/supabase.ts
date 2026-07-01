@@ -21,17 +21,18 @@ function getOrCreateClient(): SupabaseClient {
 }
 
 // Lazy Proxy: defers Supabase client creation to first property access.
-// This is critical for Vercel builds — static prerendering evaluates
-// module-level code but doesn't actually call Supabase methods.
-// Without the Proxy, createClient validates the URL at import time
-// and crashes if NEXT_PUBLIC_* env vars aren't present.
+// This is critical for static prerendering — it evaluates module-level
+// code but doesn't actually call Supabase methods. Without the Proxy,
+// createClient validates the URL at import time and crashes if
+// NEXT_PUBLIC_* env vars aren't present during build.
 export const supabase = new Proxy({} as unknown as SupabaseClient, {
   get(_target, prop, receiver) {
     const client = getOrCreateClient();
     const val = Reflect.get(client as object, prop, receiver);
     // Bind methods to the real client so 'this' works correctly
     if (typeof val === "function") {
-      return (...args: unknown[]) => (val as Function).apply(client, args);
+      return (...args: unknown[]) =>
+        (val as (...a: unknown[]) => unknown).apply(client, args);
     }
     return val;
   },

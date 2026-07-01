@@ -19,6 +19,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const stored = sessionStorage.getItem("ka_admin");
     if (stored === "true") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsAdmin(true);
     }
   }, []);

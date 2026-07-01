@@ -41,6 +41,7 @@ export default function ProjectModal({
 
   useEffect(() => {
     if (project) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(project.name);
       setStage(project.stage);
       setNextAction(project.next_action);
