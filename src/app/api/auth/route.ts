@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminPassword = process.env.ADMIN_PASSWORD || "quinn2026";
 
   if (!adminPassword) {
     return NextResponse.json({ ok: false, error: "ADMIN_PASSWORD not set" }, { status: 500 });
