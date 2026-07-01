@@ -180,6 +180,10 @@ export default function Home() {
 
   // Unique cities for filter tabs
   const cities = Array.from(new Set(projects.map((p) => p.city).filter(Boolean))).sort();
+  const cityCounts: Record<string, number> = {};
+  projects.forEach((p) => {
+    if (p.city) cityCounts[p.city] = (cityCounts[p.city] || 0) + 1;
+  });
   const filteredProjects =
     selectedCity === "全部"
       ? projects
@@ -197,8 +201,18 @@ export default function Home() {
 
       {/* City tabs */}
       {cities.length > 0 && (
-        <div className="flex gap-1 px-6 pt-3 pb-1">
-          {["全部", ...cities].map((city) => (
+        <div className="flex items-center gap-1 px-6 pt-3 pb-1">
+          <button
+            onClick={() => setSelectedCity("全部")}
+            className={`px-3 py-1 text-xs rounded-md transition-colors ${
+              selectedCity === "全部"
+                ? "bg-gray-900 text-white"
+                : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            全部 ({projects.length})
+          </button>
+          {cities.map((city) => (
             <button
               key={city}
               onClick={() => setSelectedCity(city)}
@@ -208,9 +222,12 @@ export default function Home() {
                   : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
               }`}
             >
-              {city}
+              {city} ({cityCounts[city] || 0})
             </button>
           ))}
+          <span className="text-[10px] text-gray-300 ml-2">
+            {cities.length} 个城市 · {projects.length} 个项目
+          </span>
         </div>
       )}
 
