@@ -1,6 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
+
+const STORAGE_KEY = "ka_site_auth";
+const EXPIRE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 interface SiteAuthContextValue {
   authenticated: boolean;
@@ -18,21 +21,47 @@ export function useSiteAuth() {
   return useContext(SiteAuthContext);
 }
 
+function isExpired(ts: number): boolean {
+  return Date.now() - ts > EXPIRE_MS;
+}
+
+function refreshTimestamp() {
+  localStorage.setItem(STORAGE_KEY, String(Date.now()));
+}
+
 export function SiteAuthProvider({ children }: { children: ReactNode }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [checked, setChecked] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Restore auth state from sessionStorage on mount
+  // Check localStorage on mount — if within 7 days, auto-authenticate
   useEffect(() => {
-    const stored = sessionStorage.getItem("ka_site_auth");
-    if (stored === "true") {
-      setAuthenticated(true);
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const ts = parseInt(stored, 10);
+      if (!isNaN(ts) && !isExpired(ts)) {
+        setAuthenticated(true);
+        refreshTimestamp(); // extend on visit
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
     }
     setChecked(true);
   }, []);
 
-  const login = async (password: string): Promise<boolean> => {
+  // Extend timestamp on user activity
+  useEffect(() => {
+    if (!authenticated) return;
+    const onActivity = () => refreshTimestamp();
+    window.addEventListener("click", onActivity, { passive: true });
+    window.addEventListener("keydown", onActivity, { passive: true });
+    return () => {
+      window.removeEventListener("click", onActivity);
+      window.removeEventListener("keydown", onActivity);
+    };
+  }, [authenticated]);
+
+  const login = useCallback(async (password: string): Promise<boolean> => {
     setError(null);
     try {
       const res = await fetch("/api/site-auth", {
@@ -42,7 +71,7 @@ export function SiteAuthProvider({ children }: { children: ReactNode }) {
       });
       const data = await res.json();
       if (data.ok) {
-        sessionStorage.setItem("ka_site_auth", "true");
+        refreshTimestamp();
         setAuthenticated(true);
         return true;
       }
@@ -52,7 +81,7 @@ export function SiteAuthProvider({ children }: { children: ReactNode }) {
       setError("验证失败，请重试");
       return false;
     }
-  };
+  }, []);
 
   if (!checked) return null;
 
