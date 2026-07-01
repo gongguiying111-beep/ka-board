@@ -180,6 +180,9 @@ export default function SummaryPage() {
               <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[80px]">
                 行政区
               </th>
+              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[90px]">
+                首次建联
+              </th>
               <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[80px]">
                 阶段
               </th>
@@ -225,6 +228,9 @@ export default function SummaryPage() {
                 </td>
                 <td className="py-3 pr-4 border-b border-gray-100">
                   <span className="text-xs text-gray-500">{p.district || "—"}</span>
+                </td>
+                <td className="py-3 pr-4 border-b border-gray-100">
+                  <span className="text-xs text-gray-500">{p.first_contact_date || "—"}</span>
                 </td>
                 <td className="py-3 pr-4 border-b border-gray-100">
                   <span className="text-xs text-gray-500">{p.stage}</span>

@@ -13,6 +13,7 @@ CREATE TABLE projects (
   blocker_reason TEXT NOT NULL DEFAULT '',
   city TEXT NOT NULL DEFAULT '',
   district TEXT NOT NULL DEFAULT '',
+  first_contact_date DATE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

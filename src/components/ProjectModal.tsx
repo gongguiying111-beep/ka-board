@@ -38,6 +38,7 @@ export default function ProjectModal({
   const [blockerReason, setBlockerReason] = useState("");
   const [city, setCity] = useState("");
   const [district, setDistrict] = useState("");
+  const [firstContactDate, setFirstContactDate] = useState("");
 
   const isEdit = !!project;
 
@@ -54,6 +55,7 @@ export default function ProjectModal({
       setBlockerReason(project.blocker_reason || "");
       setCity(project.city || "");
       setDistrict(project.district || "");
+      setFirstContactDate(project.first_contact_date || "");
     } else {
       setName("");
       setStage(stages[0]);
@@ -65,6 +67,7 @@ export default function ProjectModal({
       setBlockerReason("");
       setCity("");
       setDistrict("");
+      setFirstContactDate("");
     }
   }, [project, isOpen]);
 
@@ -83,6 +86,7 @@ export default function ProjectModal({
       blocker_reason: hasBlocker ? blockerReason.trim() : "",
       city: city.trim(),
       district: district.trim(),
+      first_contact_date: firstContactDate || null,
     });
   };
 
@@ -177,6 +181,24 @@ export default function ProjectModal({
                              }`}
                 />
               </div>
+            </div>
+
+            {/* 首次建联时间 */}
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                首次建联时间
+              </label>
+              <input
+                type="date"
+                value={firstContactDate}
+                onChange={(e) => setFirstContactDate(e.target.value)}
+                disabled={!isAdmin}
+                className={`w-full px-3 py-2 text-sm border rounded-lg
+                           ${!isAdmin
+                             ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                             : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                           }`}
+              />
             </div>
 
             {/* 项目阶段 */}

@@ -14,6 +14,7 @@ export interface Project {
   blocker_reason: string;
   city: string;
   district: string;
+  first_contact_date: string | null;
   created_at: string;
   updated_at: string;
 }
