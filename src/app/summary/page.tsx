@@ -91,6 +91,7 @@ export default function SummaryPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [filterCity, setFilterCity] = useState<string>("全部");
 
   const fetchProjects = useCallback(async () => {
     try {
@@ -129,6 +130,12 @@ export default function SummaryPage() {
     red: "🔴",
   };
 
+  const cities = Array.from(new Set(projects.map((p) => p.city).filter(Boolean))).sort();
+  const filteredProjects =
+    filterCity === "全部"
+      ? projects
+      : projects.filter((p) => p.city === filterCity);
+
   return (
     <main className="h-full bg-white overflow-auto">
       {fetchError && (
@@ -140,6 +147,27 @@ export default function SummaryPage() {
       )}
 
       <div className="px-6 py-4">
+        {/* City filter */}
+        {cities.length > 0 && (
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xs text-gray-400">城市筛选：</span>
+            <select
+              value={filterCity}
+              onChange={(e) => setFilterCity(e.target.value)}
+              className="text-xs border border-gray-200 rounded-md px-2 py-1 bg-white
+                         focus:outline-none focus:border-gray-300"
+            >
+              <option value="全部">全部</option>
+              {cities.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <span className="text-xs text-gray-300">
+              {filteredProjects.length} 个项目
+            </span>
+          </div>
+        )}
+
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-200">
@@ -173,7 +201,7 @@ export default function SummaryPage() {
             </tr>
           </thead>
           <tbody>
-            {projects.map((p, i) => (
+            {filteredProjects.map((p, i) => (
               <tr
                 key={p.id}
                 className={`${
@@ -229,7 +257,7 @@ export default function SummaryPage() {
           </tbody>
         </table>
 
-        {projects.length === 0 && (
+        {filteredProjects.length === 0 && (
           <p className="text-center text-xs text-gray-300 py-16">暂无项目</p>
         )}
       </div>

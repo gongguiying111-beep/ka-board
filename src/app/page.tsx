@@ -15,6 +15,9 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
+  // City filter
+  const [selectedCity, setSelectedCity] = useState<string>("全部");
+
   // Modal state
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -175,8 +178,15 @@ export default function Home() {
     );
   }
 
+  // Unique cities for filter tabs
+  const cities = Array.from(new Set(projects.map((p) => p.city).filter(Boolean))).sort();
+  const filteredProjects =
+    selectedCity === "全部"
+      ? projects
+      : projects.filter((p) => p.city === selectedCity);
+
   return (
-    <main className="h-full bg-gray-50/50">
+    <main className="h-full flex flex-col bg-gray-50/50">
       {fetchError && (
         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-40">
           <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-md">
@@ -185,13 +195,34 @@ export default function Home() {
         </div>
       )}
 
-      <Board
-        projects={projects}
-        isAdmin={isAdmin}
-        onCardClick={handleCardClick}
-        onNewProject={handleNewProject}
-        onDragEnd={handleDragEnd}
-      />
+      {/* City tabs */}
+      {cities.length > 0 && (
+        <div className="flex gap-1 px-6 pt-3 pb-1">
+          {["全部", ...cities].map((city) => (
+            <button
+              key={city}
+              onClick={() => setSelectedCity(city)}
+              className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                selectedCity === city
+                  ? "bg-gray-900 text-white"
+                  : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              {city}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="flex-1 min-h-0">
+        <Board
+          projects={filteredProjects}
+          isAdmin={isAdmin}
+          onCardClick={handleCardClick}
+          onNewProject={handleNewProject}
+          onDragEnd={handleDragEnd}
+        />
+      </div>
 
       <ProjectModal
         isOpen={showModal}
