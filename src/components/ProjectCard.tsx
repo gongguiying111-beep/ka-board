@@ -1,11 +1,6 @@
 import type { Project } from "@/types";
+import { stageColors } from "@/lib/stages";
 import { relativeTime } from "@/lib/utils";
-
-const healthLabel: Record<string, string> = {
-  green: "🟢",
-  yellow: "🟡",
-  red: "🔴",
-};
 
 interface ProjectCardProps {
   project: Project;
@@ -13,46 +8,55 @@ interface ProjectCardProps {
   isDragging?: boolean;
 }
 
+function daysSince(date: string): number {
+  const now = Date.now();
+  const then = new Date(date).getTime();
+  return Math.floor((now - then) / (1000 * 60 * 60 * 24));
+}
+
 export default function ProjectCard({ project, onClick, isDragging }: ProjectCardProps) {
+  const color = stageColors[project.stage] || "#94A3B8";
+  const inactive = daysSince(project.updated_at);
+  const dot =
+    inactive > 30 ? "🔴" : inactive > 14 ? "🟠" : null;
+
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left rounded-lg border px-4 py-3
-                  transition-colors focus:outline-none
-                  ${isDragging ? "shadow-md" : "shadow-[0_1px_2px_rgba(0,0,0,0.03)]"}
-                  ${
-                    project.has_blocker
-                      ? "bg-red-50/50 border-red-200 hover:bg-red-50/80"
-                      : "bg-white border-gray-100 hover:bg-gray-50/80"
-                  }`}
+      className={`w-full text-left bg-white rounded-lg border border-gray-100 pl-3 pr-4 py-3
+                  hover:bg-gray-50/80 transition-colors focus:outline-none relative overflow-hidden
+                  ${isDragging ? "shadow-md" : "shadow-[0_1px_2px_rgba(0,0,0,0.03)]"}`}
+      style={{ borderLeft: `4px solid ${color}` }}
     >
-      <div className="flex items-center justify-between gap-2 mb-1.5">
-        <div className="flex items-center gap-1.5 min-w-0">
-          {project.has_blocker && (
-            <span className="text-sm shrink-0" title={project.blocker_reason}>🚨</span>
-          )}
-          <span className="text-sm font-medium text-gray-900 truncate">
-            {project.name}
-          </span>
-        </div>
-        <span className="text-xs shrink-0">{healthLabel[project.health]}</span>
-      </div>
-      {project.city && (
-        <span className="inline-block text-[10px] text-gray-400 bg-gray-100 rounded px-1.5 py-0.5 mb-1">
-          {project.city}
+      {/* Name + inactivity dot */}
+      <div className="flex items-center justify-between gap-2 mb-1">
+        <span className="text-sm font-medium text-gray-900 truncate">
+          {project.name}
         </span>
-      )}
-      {project.has_blocker && project.blocker_reason && (
-        <p className="text-xs text-red-600 truncate mb-1.5">
-          {project.blocker_reason}
-        </p>
-      )}
+        {dot && (
+          <span className="text-[10px] shrink-0" title={`${inactive}天未更新`}>{dot}</span>
+        )}
+      </div>
+
+      {/* City + connected date */}
+      <div className="flex items-center gap-2 mb-1">
+        {project.city && (
+          <span className="text-[11px] text-gray-400">📍{project.city}</span>
+        )}
+        {project.first_contact_date && (
+          <span className="text-[11px] text-gray-400">{project.first_contact_date}</span>
+        )}
+      </div>
+
+      {/* Next action */}
       {project.next_action && (
-        <p className="text-xs text-gray-500 truncate mb-1.5">
+        <p className="text-xs text-gray-500 truncate mb-1">
           {project.next_action}
         </p>
       )}
-      <p className="text-[11px] text-gray-300">
+
+      {/* Updated time */}
+      <p className="text-[10px] text-gray-300">
         {relativeTime(project.updated_at)}
       </p>
     </button>
