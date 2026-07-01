@@ -1,18 +1,38 @@
 import { createClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-function getSupabase() {
+let _client: SupabaseClient | null = null;
+
+function getOrCreateClient(): SupabaseClient {
+  if (_client) return _client;
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!url || !key || url === "your_supabase_url") {
-    // Return a client that will fail at call-time with a clear error,
-    // but does not crash at import-time (allows builds without real env vars).
-    return createClient("http://localhost:54321", "placeholder", {
-      db: { schema: "public" },
-    });
+  if (!url || !key) {
+    // Fallback for build-time SSR — won't actually work at runtime,
+    // but allows Next.js static prerendering to complete
+    _client = createClient("https://placeholder.supabase.co", "placeholder-key");
+  } else {
+    _client = createClient(url, key);
   }
 
-  return createClient(url, key);
+  return _client;
 }
 
-export const supabase = getSupabase();
+// Lazy Proxy: defers Supabase client creation to first property access.
+// This is critical for Vercel builds — static prerendering evaluates
+// module-level code but doesn't actually call Supabase methods.
+// Without the Proxy, createClient validates the URL at import time
+// and crashes if NEXT_PUBLIC_* env vars aren't present.
+export const supabase = new Proxy({} as unknown as SupabaseClient, {
+  get(_target, prop, receiver) {
+    const client = getOrCreateClient();
+    const val = Reflect.get(client as object, prop, receiver);
+    // Bind methods to the real client so 'this' works correctly
+    if (typeof val === "function") {
+      return (...args: unknown[]) => (val as Function).apply(client, args);
+    }
+    return val;
+  },
+});

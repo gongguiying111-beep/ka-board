@@ -17,16 +17,31 @@ export default function ProjectCard({ project, onClick, isDragging }: ProjectCar
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left bg-white rounded-lg border border-gray-100 px-4 py-3
-                  hover:bg-gray-50/80 transition-colors focus:outline-none
-                  ${isDragging ? "shadow-md" : "shadow-[0_1px_2px_rgba(0,0,0,0.03)]"}`}
+      className={`w-full text-left rounded-lg border px-4 py-3
+                  transition-colors focus:outline-none
+                  ${isDragging ? "shadow-md" : "shadow-[0_1px_2px_rgba(0,0,0,0.03)]"}
+                  ${
+                    project.has_blocker
+                      ? "bg-red-50/50 border-red-200 hover:bg-red-50/80"
+                      : "bg-white border-gray-100 hover:bg-gray-50/80"
+                  }`}
     >
       <div className="flex items-center justify-between gap-2 mb-1.5">
-        <span className="text-sm font-medium text-gray-900 truncate">
-          {project.name}
-        </span>
+        <div className="flex items-center gap-1.5 min-w-0">
+          {project.has_blocker && (
+            <span className="text-sm shrink-0" title={project.blocker_reason}>🚨</span>
+          )}
+          <span className="text-sm font-medium text-gray-900 truncate">
+            {project.name}
+          </span>
+        </div>
         <span className="text-xs shrink-0">{healthLabel[project.health]}</span>
       </div>
+      {project.has_blocker && project.blocker_reason && (
+        <p className="text-xs text-red-600 truncate mb-1.5">
+          {project.blocker_reason}
+        </p>
+      )}
       {project.next_action && (
         <p className="text-xs text-gray-500 truncate mb-1.5">
           {project.next_action}

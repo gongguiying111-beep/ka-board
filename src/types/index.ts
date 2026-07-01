@@ -10,6 +10,8 @@ export interface Project {
   health: Health;
   notes: string;
   summary: string;
+  has_blocker: boolean;
+  blocker_reason: string;
   created_at: string;
   updated_at: string;
 }

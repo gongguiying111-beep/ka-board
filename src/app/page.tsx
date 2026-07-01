@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useEffect, useState, useCallback } from "react";
 import type { DropResult } from "@hello-pangea/dnd";
 import type { Project, ProjectInput } from "@/types";
@@ -15,7 +13,7 @@ export default function Home() {
   const { isAdmin } = useAdmin();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +25,7 @@ export default function Home() {
   // Fetch all projects
   const fetchProjects = useCallback(async () => {
     try {
-      setFetchError(false);
+      setFetchError(null);
       const { data, error } = await supabase
         .from("projects")
         .select("*")
@@ -37,7 +35,7 @@ export default function Home() {
       setProjects(data || []);
     } catch (err) {
       console.error("Failed to fetch projects:", err);
-      setFetchError(true);
+      setFetchError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }

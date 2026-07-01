@@ -90,11 +90,11 @@ export default function SummaryPage() {
   const { isAdmin } = useAdmin();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   const fetchProjects = useCallback(async () => {
     try {
-      setFetchError(false);
+      setFetchError(null);
       const { data, error } = await supabase
         .from("projects")
         .select("*")
@@ -104,7 +104,7 @@ export default function SummaryPage() {
       setProjects(data || []);
     } catch (err) {
       console.error("Failed to fetch projects:", err);
-      setFetchError(true);
+      setFetchError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -151,6 +151,9 @@ export default function SummaryPage() {
               <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400">
                 下一步
               </th>
+              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[120px]">
+                Blocker
+              </th>
               <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[200px]">
                 关键信息总结
               </th>
@@ -167,7 +170,11 @@ export default function SummaryPage() {
               <tr
                 key={p.id}
                 className={`${
-                  i % 2 === 1 ? "bg-gray-50/60" : "bg-white"
+                  p.has_blocker
+                    ? "bg-red-50/40"
+                    : i % 2 === 1
+                      ? "bg-gray-50/60"
+                      : "bg-white"
                 } hover:bg-gray-100/60 transition-colors`}
               >
                 <td className="py-3 pr-4 border-b border-gray-100">
@@ -185,6 +192,15 @@ export default function SummaryPage() {
                   <span className="text-xs text-gray-600 line-clamp-2">
                     {p.next_action || "-"}
                   </span>
+                </td>
+                <td className="py-3 pr-4 border-b border-gray-100">
+                  {p.has_blocker ? (
+                    <span className="text-xs text-red-600 whitespace-pre-line">
+                      🚨 {p.blocker_reason || "阻塞"}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-gray-300">—</span>
+                  )}
                 </td>
                 <td className="py-3 pr-4 border-b border-gray-100">
                   <SummaryCell projectId={p.id} value={p.summary || ""} isAdmin={isAdmin} />

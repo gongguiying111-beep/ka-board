@@ -32,6 +32,8 @@ export default function ProjectModal({
   const [health, setHealth] = useState<Health>("green");
   const [summary, setSummary] = useState("");
   const [notes, setNotes] = useState("");
+  const [hasBlocker, setHasBlocker] = useState(false);
+  const [blockerReason, setBlockerReason] = useState("");
 
   const isEdit = !!project;
 
@@ -43,6 +45,8 @@ export default function ProjectModal({
       setHealth(project.health);
       setSummary(project.summary || "");
       setNotes(project.notes);
+      setHasBlocker(project.has_blocker || false);
+      setBlockerReason(project.blocker_reason || "");
     } else {
       setName("");
       setStage(stages[0]);
@@ -50,6 +54,8 @@ export default function ProjectModal({
       setHealth("green");
       setSummary("");
       setNotes(NOTES_TEMPLATE);
+      setHasBlocker(false);
+      setBlockerReason("");
     }
   }, [project, isOpen]);
 
@@ -64,6 +70,8 @@ export default function ProjectModal({
       health,
       summary: summary.trim(),
       notes,
+      has_blocker: hasBlocker,
+      blocker_reason: hasBlocker ? blockerReason.trim() : "",
     });
   };
 
@@ -145,6 +153,48 @@ export default function ProjectModal({
                            focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200
                            placeholder:text-gray-300"
               />
+            </div>
+
+            {/* Blocker 阻塞项 */}
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-2">
+                是否存在阻塞项
+              </label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setHasBlocker(false)}
+                  className={`px-4 py-1.5 text-xs rounded-md border transition-colors ${
+                    !hasBlocker
+                      ? "border-gray-400 bg-gray-50 text-gray-700"
+                      : "border-gray-200 text-gray-400 hover:border-gray-300"
+                  }`}
+                >
+                  否
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setHasBlocker(true)}
+                  className={`px-4 py-1.5 text-xs rounded-md border transition-colors ${
+                    hasBlocker
+                      ? "border-red-300 bg-red-50 text-red-700"
+                      : "border-gray-200 text-gray-400 hover:border-gray-300"
+                  }`}
+                >
+                  🚨 是
+                </button>
+              </div>
+              {hasBlocker && (
+                <input
+                  type="text"
+                  value={blockerReason}
+                  onChange={(e) => setBlockerReason(e.target.value)}
+                  placeholder="例如：无法联系决策人、等待客户反馈、等待报价..."
+                  className="mt-2 w-full px-3 py-2 text-sm border border-red-200 rounded-lg
+                             focus:outline-none focus:border-red-300 focus:ring-1 focus:ring-red-200
+                             placeholder:text-gray-300 bg-red-50/30"
+                />
+              )}
             </div>
 
             {/* 关键信息总结 */}
