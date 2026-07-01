@@ -14,6 +14,7 @@ const healthOptions: { value: Health; label: string }[] = [
 interface ProjectModalProps {
   isOpen: boolean;
   project?: Project | null;
+  isAdmin: boolean;
   onClose: () => void;
   onSave: (data: ProjectInput) => void;
   onDelete?: () => void;
@@ -22,6 +23,7 @@ interface ProjectModalProps {
 export default function ProjectModal({
   isOpen,
   project,
+  isAdmin,
   onClose,
   onSave,
   onDelete,
@@ -89,7 +91,7 @@ export default function ProjectModal({
           {/* Header */}
           <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100">
             <h2 className="text-base font-semibold text-gray-900">
-              {isEdit ? "编辑项目" : "新建项目"}
+              {!isAdmin ? "查看项目" : isEdit ? "编辑项目" : "新建项目"}
             </h2>
             <button
               type="button"
@@ -114,10 +116,15 @@ export default function ProjectModal({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                disabled={!isAdmin}
+                readOnly={!isAdmin}
                 placeholder="输入客户名称"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg
-                           focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200
-                           placeholder:text-gray-300"
+                className={`w-full px-3 py-2 text-sm border rounded-lg
+                           placeholder:text-gray-300
+                           ${!isAdmin
+                             ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                             : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                           }`}
               />
             </div>
 
@@ -129,9 +136,12 @@ export default function ProjectModal({
               <select
                 value={stage}
                 onChange={(e) => setStage(e.target.value as Stage)}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg
-                           focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200
-                           bg-white"
+                disabled={!isAdmin}
+                className={`w-full px-3 py-2 text-sm border rounded-lg bg-white
+                           ${!isAdmin
+                             ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default appearance-none"
+                             : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                           }`}
               >
                 {stages.map((s) => (
                   <option key={s} value={s}>{s}</option>
@@ -148,14 +158,20 @@ export default function ProjectModal({
                 type="text"
                 value={nextAction}
                 onChange={(e) => setNextAction(e.target.value)}
+                disabled={!isAdmin}
+                readOnly={!isAdmin}
                 placeholder="下一步行动"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg
-                           focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200
-                           placeholder:text-gray-300"
+                className={`w-full px-3 py-2 text-sm border rounded-lg
+                           placeholder:text-gray-300
+                           ${!isAdmin
+                             ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                             : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                           }`}
               />
             </div>
 
             {/* Blocker 阻塞项 */}
+            {isAdmin && (
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-2">
                 是否存在阻塞项
@@ -196,6 +212,18 @@ export default function ProjectModal({
                 />
               )}
             </div>
+            )}
+            {/* Show blocker info in read-only mode */}
+            {!isAdmin && project?.has_blocker && (
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                Blocker
+              </label>
+              <p className="text-xs text-red-600 bg-red-50/50 rounded-lg px-3 py-2">
+                🚨 {project.blocker_reason || "阻塞"}
+              </p>
+            </div>
+            )}
 
             {/* 关键信息总结 */}
             <div>
@@ -205,11 +233,16 @@ export default function ProjectModal({
               <textarea
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
+                disabled={!isAdmin}
+                readOnly={!isAdmin}
                 rows={3}
                 placeholder="简要总结本项目关键信息"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg
-                           focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200
-                           resize-none leading-relaxed placeholder:text-gray-300"
+                className={`w-full px-3 py-2 text-sm border rounded-lg
+                           resize-none leading-relaxed placeholder:text-gray-300
+                           ${!isAdmin
+                             ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                             : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                           }`}
               />
             </div>
 
@@ -223,11 +256,14 @@ export default function ProjectModal({
                   <button
                     key={h.value}
                     type="button"
+                    disabled={!isAdmin}
                     onClick={() => setHealth(h.value)}
                     className={`px-3 py-1.5 text-xs rounded-md border transition-colors ${
                       health === h.value
                         ? "border-gray-400 bg-gray-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        : !isAdmin
+                          ? "border-gray-100 cursor-default"
+                          : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
                     {h.label}
@@ -244,10 +280,15 @@ export default function ProjectModal({
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
+                disabled={!isAdmin}
+                readOnly={!isAdmin}
                 rows={10}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg
-                           focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200
-                           resize-none leading-relaxed"
+                className={`w-full px-3 py-2 text-sm border rounded-lg
+                           resize-none leading-relaxed
+                           ${!isAdmin
+                             ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                             : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                           }`}
               />
             </div>
           </div>
@@ -255,7 +296,7 @@ export default function ProjectModal({
           {/* Footer */}
           <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
             <div>
-              {isEdit && onDelete && (
+              {isAdmin && isEdit && onDelete && (
                 <button
                   type="button"
                   onClick={onDelete}
@@ -271,15 +312,17 @@ export default function ProjectModal({
                 onClick={onClose}
                 className="px-4 py-2 text-xs text-gray-500 hover:text-gray-700 transition-colors"
               >
-                取消
+                {isAdmin ? "取消" : "关闭"}
               </button>
-              <button
-                type="submit"
-                className="px-4 py-2 text-xs font-medium text-white bg-gray-900 rounded-lg
-                           hover:bg-gray-800 transition-colors"
-              >
-                保存
-              </button>
+              {isAdmin && (
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-xs font-medium text-white bg-gray-900 rounded-lg
+                             hover:bg-gray-800 transition-colors"
+                >
+                  保存
+                </button>
+              )}
             </div>
           </div>
         </form>

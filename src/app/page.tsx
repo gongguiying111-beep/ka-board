@@ -51,9 +51,8 @@ export default function Home() {
     setShowModal(true);
   };
 
-  // Edit project — only when admin
+  // View project — anyone can view; only admin can edit
   const handleCardClick = (project: Project) => {
-    if (!isAdmin) return;
     setEditingProject(project);
     setShowModal(true);
   };
@@ -196,6 +195,7 @@ export default function Home() {
       <ProjectModal
         isOpen={showModal}
         project={editingProject}
+        isAdmin={isAdmin}
         onClose={handleCloseModal}
         onSave={handleSave}
         onDelete={isAdmin ? handleDeleteRequest : undefined}
