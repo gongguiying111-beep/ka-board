@@ -15,6 +15,7 @@ export interface Project {
   city: string;
   district: string;
   first_contact_date: string | null;
+  assignee: string;
   created_at: string;
   updated_at: string;
 }

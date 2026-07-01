@@ -39,6 +39,7 @@ export default function ProjectModal({
   const [city, setCity] = useState("");
   const [district, setDistrict] = useState("");
   const [firstContactDate, setFirstContactDate] = useState("");
+  const [assignee, setAssignee] = useState("");
 
   const isEdit = !!project;
 
@@ -56,6 +57,7 @@ export default function ProjectModal({
       setCity(project.city || "");
       setDistrict(project.district || "");
       setFirstContactDate(project.first_contact_date || "");
+      setAssignee(project.assignee || "");
     } else {
       setName("");
       setStage(stages[0]);
@@ -68,6 +70,7 @@ export default function ProjectModal({
       setCity("");
       setDistrict("");
       setFirstContactDate("");
+      setAssignee("");
     }
   }, [project, isOpen]);
 
@@ -87,6 +90,7 @@ export default function ProjectModal({
       city: city.trim(),
       district: district.trim(),
       first_contact_date: firstContactDate || null,
+      assignee: assignee.trim(),
     });
   };
 
@@ -183,22 +187,42 @@ export default function ProjectModal({
               </div>
             </div>
 
-            {/* 首次建联时间 */}
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5">
-                首次建联时间
-              </label>
-              <input
-                type="date"
-                value={firstContactDate}
-                onChange={(e) => setFirstContactDate(e.target.value)}
-                disabled={!isAdmin}
-                className={`w-full px-3 py-2 text-sm border rounded-lg
-                           ${!isAdmin
-                             ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
-                             : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
-                           }`}
-              />
+            {/* 首次建联时间 + 跟进人 */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                  首次建联时间
+                </label>
+                <input
+                  type="date"
+                  value={firstContactDate}
+                  onChange={(e) => setFirstContactDate(e.target.value)}
+                  disabled={!isAdmin}
+                  className={`w-full px-3 py-2 text-sm border rounded-lg
+                             ${!isAdmin
+                               ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                               : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                             }`}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                  跟进人
+                </label>
+                <input
+                  type="text"
+                  value={assignee}
+                  onChange={(e) => setAssignee(e.target.value)}
+                  disabled={!isAdmin}
+                  readOnly={!isAdmin}
+                  placeholder="跟进人"
+                  className={`w-full px-3 py-2 text-sm border rounded-lg placeholder:text-gray-300
+                             ${!isAdmin
+                               ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                               : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                             }`}
+                />
+              </div>
             </div>
 
             {/* 项目阶段 */}

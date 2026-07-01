@@ -14,6 +14,7 @@ CREATE TABLE projects (
   city TEXT NOT NULL DEFAULT '',
   district TEXT NOT NULL DEFAULT '',
   first_contact_date DATE,
+  assignee TEXT NOT NULL DEFAULT '',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

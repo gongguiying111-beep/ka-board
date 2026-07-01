@@ -38,13 +38,16 @@ export default function ProjectCard({ project, onClick, isDragging }: ProjectCar
         )}
       </div>
 
-      {/* City + connected date */}
-      <div className="flex items-center gap-2 mb-1">
+      {/* City + connected date + assignee */}
+      <div className="flex items-center gap-2 mb-1 flex-wrap">
         {project.city && (
           <span className="text-[11px] text-gray-400">📍{project.city}</span>
         )}
         {project.first_contact_date && (
           <span className="text-[11px] text-gray-400">{project.first_contact_date}</span>
+        )}
+        {project.assignee && (
+          <span className="text-[11px] text-gray-400">👤{project.assignee}</span>
         )}
       </div>
 
