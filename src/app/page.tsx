@@ -193,8 +193,8 @@ export default function Home() {
     <main className="h-full flex flex-col bg-gray-50/50">
       {fetchError && (
         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-40">
-          <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-md">
-            无法连接数据库，请检查 Supabase 配置
+          <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-md max-w-md break-all">
+            错误: {fetchError}
           </p>
         </div>
       )}
