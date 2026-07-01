@@ -37,6 +37,11 @@ export default function ProjectCard({ project, onClick, isDragging }: ProjectCar
         </div>
         <span className="text-xs shrink-0">{healthLabel[project.health]}</span>
       </div>
+      {project.city && (
+        <span className="inline-block text-[10px] text-gray-400 bg-gray-100 rounded px-1.5 py-0.5 mb-1">
+          {project.city}
+        </span>
+      )}
       {project.has_blocker && project.blocker_reason && (
         <p className="text-xs text-red-600 truncate mb-1.5">
           {project.blocker_reason}
