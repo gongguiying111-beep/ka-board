@@ -12,6 +12,8 @@ export interface Project {
   summary: string;
   has_blocker: boolean;
   blocker_reason: string;
+  city: string;
+  district: string;
   created_at: string;
   updated_at: string;
 }

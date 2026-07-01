@@ -36,6 +36,8 @@ export default function ProjectModal({
   const [notes, setNotes] = useState("");
   const [hasBlocker, setHasBlocker] = useState(false);
   const [blockerReason, setBlockerReason] = useState("");
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
 
   const isEdit = !!project;
 
@@ -50,6 +52,8 @@ export default function ProjectModal({
       setNotes(project.notes);
       setHasBlocker(project.has_blocker || false);
       setBlockerReason(project.blocker_reason || "");
+      setCity(project.city || "");
+      setDistrict(project.district || "");
     } else {
       setName("");
       setStage(stages[0]);
@@ -59,6 +63,8 @@ export default function ProjectModal({
       setNotes(NOTES_TEMPLATE);
       setHasBlocker(false);
       setBlockerReason("");
+      setCity("");
+      setDistrict("");
     }
   }, [project, isOpen]);
 
@@ -75,6 +81,8 @@ export default function ProjectModal({
       notes,
       has_blocker: hasBlocker,
       blocker_reason: hasBlocker ? blockerReason.trim() : "",
+      city: city.trim(),
+      district: district.trim(),
     });
   };
 
@@ -127,6 +135,48 @@ export default function ProjectModal({
                              : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
                            }`}
               />
+            </div>
+
+            {/* 城市 + 行政区 */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                  城市
+                </label>
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  disabled={!isAdmin}
+                  readOnly={!isAdmin}
+                  placeholder="例如：无锡"
+                  className={`w-full px-3 py-2 text-sm border rounded-lg
+                             placeholder:text-gray-300
+                             ${!isAdmin
+                               ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                               : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                             }`}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                  行政区
+                </label>
+                <input
+                  type="text"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  disabled={!isAdmin}
+                  readOnly={!isAdmin}
+                  placeholder="例如：新吴区"
+                  className={`w-full px-3 py-2 text-sm border rounded-lg
+                             placeholder:text-gray-300
+                             ${!isAdmin
+                               ? "border-gray-100 bg-gray-50 text-gray-600 cursor-default"
+                               : "border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                             }`}
+                />
+              </div>
             </div>
 
             {/* 项目阶段 */}

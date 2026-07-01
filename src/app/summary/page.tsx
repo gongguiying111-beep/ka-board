@@ -146,6 +146,12 @@ export default function SummaryPage() {
               <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[140px]">
                 客户名称
               </th>
+              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[70px]">
+                城市
+              </th>
+              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[80px]">
+                行政区
+              </th>
               <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[80px]">
                 阶段
               </th>
@@ -185,6 +191,12 @@ export default function SummaryPage() {
                       {p.name}
                     </span>
                   </div>
+                </td>
+                <td className="py-3 pr-4 border-b border-gray-100">
+                  <span className="text-xs text-gray-500">{p.city || "—"}</span>
+                </td>
+                <td className="py-3 pr-4 border-b border-gray-100">
+                  <span className="text-xs text-gray-500">{p.district || "—"}</span>
                 </td>
                 <td className="py-3 pr-4 border-b border-gray-100">
                   <span className="text-xs text-gray-500">{p.stage}</span>

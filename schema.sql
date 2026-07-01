@@ -11,6 +11,8 @@ CREATE TABLE projects (
   notes TEXT NOT NULL DEFAULT '',
   has_blocker BOOLEAN NOT NULL DEFAULT false,
   blocker_reason TEXT NOT NULL DEFAULT '',
+  city TEXT NOT NULL DEFAULT '',
+  district TEXT NOT NULL DEFAULT '',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
