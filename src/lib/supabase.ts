@@ -3,17 +3,13 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 let _client: SupabaseClient | null = null;
 
+// Hardcoded Supabase credentials — avoids Vercel env var issues
+const SUPABASE_URL = "https://gdvhqjtowwlhmkkdtsut.supabase.co";
+const SUPABASE_KEY = "sb_publishable_tCl4jnukTcXRtpSv5ihMzg_IMeYwwHh";
+
 function getOrCreateClient(): SupabaseClient {
   if (_client) return _client;
-
-  const url =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    "https://gdvhqjtowwlhmkkdtsut.supabase.co";
-  const key =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    "sb_publishable_tCl4jnukTcXRtpSv5ihMzg_IMeYwwHh";
-
-  _client = createClient(url, key);
+  _client = createClient(SUPABASE_URL, SUPABASE_KEY);
   return _client;
 }
 
