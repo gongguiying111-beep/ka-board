@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import type { Project } from "@/types";
-import { supabase } from "@/lib/supabase";
+import { api } from "@/lib/api";
 import { relativeTime } from "@/lib/utils";
 import { stages } from "@/lib/stages";
 
@@ -14,7 +14,7 @@ export default function DailyPage() {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await api
         .from("projects")
         .select("*")
         .order("updated_at", { ascending: false });

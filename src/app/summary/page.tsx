@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import type { Project } from "@/types";
-import { supabase } from "@/lib/supabase";
+import { api } from "@/lib/api";
 import { useAdmin } from "@/lib/auth";
 import { relativeTime } from "@/lib/utils";
 
@@ -44,7 +44,7 @@ function SummaryCell({
   const handleSave = useCallback(async () => {
     setEditing(false);
     if (text === value) return;
-    await supabase
+    await api
       .from("projects")
       .update({ summary: text })
       .eq("id", projectId);
@@ -96,7 +96,7 @@ export default function SummaryPage() {
   const fetchProjects = useCallback(async () => {
     try {
       setFetchError(null);
-      const { data, error } = await supabase
+      const { data, error } = await api
         .from("projects")
         .select("*")
         .order("updated_at", { ascending: false });

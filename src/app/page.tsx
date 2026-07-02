@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import type { DropResult } from "@hello-pangea/dnd";
 import type { Project, ProjectInput } from "@/types";
-import { supabase } from "@/lib/supabase";
+import { api } from "@/lib/api";
 import { useAdmin } from "@/lib/auth";
 import Board from "@/components/Board";
 import ProjectModal from "@/components/ProjectModal";
@@ -29,7 +29,7 @@ export default function Home() {
   const fetchProjects = useCallback(async () => {
     try {
       setFetchError(null);
-      const { data, error } = await supabase
+      const { data, error } = await api
         .from("projects")
         .select("*")
         .order("updated_at", { ascending: false });
@@ -65,7 +65,7 @@ export default function Home() {
   const handleSave = async (data: ProjectInput) => {
     if (editingProject) {
       // Update existing
-      const { error } = await supabase
+      const { error } = await api
         .from("projects")
         .update(data)
         .eq("id", editingProject.id);
@@ -84,7 +84,7 @@ export default function Home() {
       );
     } else {
       // Create new
-      const { data: created, error } = await supabase
+      const { data: created, error } = await api
         .from("projects")
         .insert(data)
         .select()
@@ -115,7 +115,7 @@ export default function Home() {
   const handleDeleteConfirm = async () => {
     if (!deletingProject) return;
 
-    const { error } = await supabase
+    const { error } = await api
       .from("projects")
       .delete()
       .eq("id", deletingProject.id);
@@ -152,7 +152,7 @@ export default function Home() {
     );
 
     // Update database
-    const { error } = await supabase
+    const { error } = await api
       .from("projects")
       .update({ stage: destStage })
       .eq("id", projectId);
