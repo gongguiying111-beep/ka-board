@@ -233,6 +233,60 @@ export default function Home() {
         </div>
       )}
 
+      {/* KA 需求摸底清单 */}
+      <div className="px-6 pt-2 pb-1">
+        <div className="rounded-xl border border-amber-200 bg-amber-50/70 px-5 py-4">
+          <h3 className="text-sm font-semibold text-amber-800 mb-3">
+            📋 KA 首次需求摸底清单
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-2">
+            <div>
+              <p className="text-[11px] font-semibold text-amber-700 mb-1">一、业务概况</p>
+              <ul className="text-[10px] text-amber-600 space-y-0.5 leading-relaxed">
+                <li>1. 主要做什么业务？</li>
+                <li>2. 主要配送哪些货物？</li>
+                <li>3. 配送场景？（仓-店/仓-仓/仓-社区/仓-工厂）</li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold text-amber-700 mb-1">二、物流现状</p>
+              <ul className="text-[10px] text-amber-600 space-y-0.5 leading-relaxed">
+                <li>4. 配送时间？</li>
+                <li>5. 一天几趟？</li>
+                <li>6. 多少条线路？</li>
+                <li>7. 每条线路多少公里？</li>
+                <li>8. 每条线路多少站点？</li>
+                <li>9. 每天配送量？（件/方/吨）</li>
+                <li>10. 使用什么车型？</li>
+                <li>11. 自营还是外包？</li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold text-amber-700 mb-1">三、成本情况</p>
+              <ul className="text-[10px] text-amber-600 space-y-0.5 leading-relaxed">
+                <li>12. 单线路配送成本？</li>
+                <li>13. 司机/车辆/油费等成本？</li>
+              </ul>
+              <p className="text-[11px] font-semibold text-amber-700 mb-1 mt-2">四、需求与痛点</p>
+              <ul className="text-[10px] text-amber-600 space-y-0.5 leading-relaxed">
+                <li>14. 最大物流痛点？</li>
+                <li>15. 是否有降本压力？</li>
+                <li>16. 司机短缺/运力不足？</li>
+                <li>17. 哪些线路适合试点？为什么？</li>
+                <li>18. 最希望解决什么问题？</li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold text-amber-700 mb-1">五、决策信息</p>
+              <ul className="text-[10px] text-amber-600 space-y-0.5 leading-relaxed">
+                <li>19. 最终决策人？决策流程？</li>
+                <li>20. 下一步准备什么？何时沟通？</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="flex-1 min-h-0">
         <Board
           projects={filteredProjects}
