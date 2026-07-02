@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   // Public env vars inlined at build time.
   // Priority: shell env > .env.local > these fallback values.
   // Set these in EdgeOne Pages: Project Settings → Environment Variables.

@@ -1,67 +1,84 @@
 # KA Board
 
-个人 KA 项目看板。基于 Next.js + Supabase + Vercel。
+KA 项目看板 — 个人客户关系管理与进度追踪工具。
 
 ## 技术栈
 
 - Next.js 16 (App Router)
 - TypeScript
 - Tailwind CSS v4
-- Supabase (数据库)
-- Vercel (部署)
+- Supabase (PostgreSQL)
+- 部署：Vercel / EdgeOne Pages / Docker
 
-## 本地运行
+## 功能
+
+- 📋 Project Board — 7 阶段看板，拖拽管理
+- 📊 Project Summary — 表格汇总视图
+- 📅 Daily Overview — 每日城市概览
+- 🔐 全站密码访问 + 管理员编辑模式
+- 🚨 Blocker 阻塞项标记
+- 📍 城市分组、跟进人分配
+- 🟢🟡🔴 阶段颜色标识
+
+## 快速开始
 
 ```bash
-# 1. 安装依赖
 npm install
-
-# 2. 复制环境变量
 cp .env.example .env.local
-
-# 3. 编辑 .env.local，填入 Supabase 项目信息
-#    NEXT_PUBLIC_SUPABASE_URL=你的supabase地址
-#    NEXT_PUBLIC_SUPABASE_ANON_KEY=你的anon key
-
-# 4. 启动开发服务器
+# 编辑 .env.local 填入配置
 npm run dev
-
-# 5. 打开浏览器
-open http://localhost:3000
+# → http://localhost:3000
 ```
 
-## Supabase 初始化
+## 环境变量
 
-1. 在 [supabase.com](https://supabase.com) 创建新项目
-2. 进入 SQL Editor
-3. 复制 `schema.sql` 全部内容并执行
-4. 在项目 Settings → API 中获取 `URL` 和 `anon public key`
-5. 填入 `.env.local`
+| 变量名 | 说明 |
+|--------|------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase 项目 URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase 匿名密钥 |
+| `ADMIN_PASSWORD` | 管理员模式密码 |
+| `SITE_PASSWORD` | 网站访问密码 |
 
-## 数据库结构
+## 数据库
 
-只有一张表 `projects`：
+在 Supabase SQL Editor 中执行 `schema.sql`。
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | uuid | 主键 |
-| name | text | 客户名称 |
-| stage | text | 项目阶段 |
-| next_action | text | 下一步行动 |
-| health | text | green / yellow / red |
-| notes | text | 备注（模板格式） |
-| created_at | timestamptz | 创建时间 |
-| updated_at | timestamptz | 更新时间（自动更新） |
+## Docker 部署
 
-## 项目阶段
-
-固定的 7 个阶段（定义在 `src/lib/stages.ts`）：
-
-线索 → 已联系 → 需求确认 → 方案设计 → POC → 商务谈判 → 成交
+```bash
+docker build -t ka-board .
+docker run -p 3000:3000 \
+  -e NEXT_PUBLIC_SUPABASE_URL=your_url \
+  -e NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key \
+  -e ADMIN_PASSWORD=your_admin_pw \
+  -e SITE_PASSWORD=your_site_pw \
+  ka-board
+```
 
 ## Vercel 部署
 
-1. Push 代码到 GitHub
-2. 在 [vercel.com](https://vercel.com) 导入仓库
-3. 设置环境变量 `NEXT_PUBLIC_SUPABASE_URL` 和 `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+1. 导入 GitHub 仓库
+2. 框架自动识别 Next.js
+3. Settings → Environment Variables 配置 4 个变量
 4. 部署
+
+## EdgeOne Pages 部署
+
+1. 导入 GitHub 仓库
+2. 构建设置（默认）：Framework: Next.js | Build: `npm run build` | Output: `.next` | Node: 20
+3. 添加环境变量
+4. 部署
+
+## 项目结构
+
+```
+src/
+├── app/           # 页面 (Board / Summary / Daily)
+│   └── api/       # auth / site-auth
+├── components/    # React 组件
+├── lib/           # 工具 & 配置
+└── types/         # TypeScript 类型
+schema.sql         # 建表 SQL
+Dockerfile
+next.config.ts
+```
