@@ -171,37 +171,37 @@ export default function SummaryPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[140px]">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white w-[140px]" style={{ backgroundColor: "#00956F" }}>
                 客户名称
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[70px]">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white w-[70px]" style={{ backgroundColor: "#00956F" }}>
                 城市
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[80px]">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white w-[80px]" style={{ backgroundColor: "#00956F" }}>
                 行政区
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[90px]">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white w-[90px]" style={{ backgroundColor: "#00956F" }}>
                 首次建联
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[70px]">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white w-[70px]" style={{ backgroundColor: "#00956F" }}>
                 跟进人
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[80px]">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white w-[80px]" style={{ backgroundColor: "#00956F" }}>
                 阶段
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white" style={{ backgroundColor: "#00956F" }}>
                 下一步
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[120px]">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white w-[120px]" style={{ backgroundColor: "#00956F" }}>
                 Blocker
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400 w-[200px]">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white w-[200px]" style={{ backgroundColor: "#00956F" }}>
                 关键信息总结
               </th>
-              <th className="text-left py-3 pr-4 text-xs font-medium text-gray-400">
+              <th className="text-left py-3 pr-4 text-xs font-medium text-white" style={{ backgroundColor: "#00956F" }}>
                 备注
               </th>
-              <th className="text-left py-3 text-xs font-medium text-gray-400 w-[72px]">
+              <th className="text-left py-3 text-xs font-medium text-white w-[72px]" style={{ backgroundColor: "#00956F" }}>
                 更新
               </th>
             </tr>

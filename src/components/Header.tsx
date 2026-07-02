@@ -13,15 +13,16 @@ export default function Header() {
     <>
       <header className="shrink-0 flex items-center justify-between px-6 py-3 bg-white border-b border-gray-100">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold text-gray-900 tracking-wide">
+          <span className="text-xs font-semibold tracking-wide" style={{ color: "#00956F" }}>
             KA Board
           </span>
           <span
             className={`text-[10px] px-1.5 py-0.5 rounded-full ${
               isAdmin
-                ? "bg-amber-100 text-amber-700"
+                ? "text-white"
                 : "bg-gray-100 text-gray-400"
             }`}
+            style={isAdmin ? { backgroundColor: "#00956F" } : undefined}
           >
             {isAdmin ? "编辑模式" : "只读模式"}
           </span>

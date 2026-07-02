@@ -206,9 +206,10 @@ export default function Home() {
             onClick={() => setSelectedCity("全部")}
             className={`px-3 py-1 text-xs rounded-md transition-colors ${
               selectedCity === "全部"
-                ? "bg-gray-900 text-white"
+                ? "text-white"
                 : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
             }`}
+            style={selectedCity === "全部" ? { backgroundColor: "#00956F" } : undefined}
           >
             全部 ({projects.length})
           </button>
@@ -218,9 +219,10 @@ export default function Home() {
               onClick={() => setSelectedCity(city)}
               className={`px-3 py-1 text-xs rounded-md transition-colors ${
                 selectedCity === city
-                  ? "bg-gray-900 text-white"
+                  ? "text-white"
                   : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
               }`}
+              style={selectedCity === city ? { backgroundColor: "#00956F" } : undefined}
             >
               {city} ({cityCounts[city] || 0})
             </button>
