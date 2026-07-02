@@ -19,7 +19,10 @@ export default function Nav() {
         Project Board
       </Link>
       <Link href="/summary" className={linkClass(pathname === "/summary")}>
-        Project Summary
+        Summary
+      </Link>
+      <Link href="/daily" className={linkClass(pathname === "/daily")}>
+        Daily
       </Link>
     </nav>
   );
